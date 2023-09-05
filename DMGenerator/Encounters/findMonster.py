@@ -3,7 +3,7 @@
 import openpyxl
 
 
-def findMonster(biomeList):
+def findMonster(biomeList):  # Evig loop her?
     # Hent definisjoner fra hovedprogrammet
     monsterBok = openpyxl.load_workbook("Encounters/BookOfMonsters.xlsx")
     sheets = monsterBok.sheetnames

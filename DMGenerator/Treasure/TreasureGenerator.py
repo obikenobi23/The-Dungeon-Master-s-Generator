@@ -1,6 +1,14 @@
 import openpyxl
 import random
 import sys
+import regex as re
+from defs import scrape
+from defs import dieRoll
+
+
+## TODO: webscraper til https://dungeonmastertools.github.io/index.html
+# web scraping unit
+
 
 # Introduserer Excel
 wb = openpyxl.load_workbook('Treasure/TreasureChart.xlsx')
@@ -59,37 +67,38 @@ def rollDice(rollAmount, rollSize, multiplier):
 def equationSeparatorCash(characters):
     # string = KP:4d6x100;GP:1d6x5
     # Må fungere parallelt på ett og to elementer. Noen har to deler med semikolon-separator, andre har ikke.
-    string = ""
-    for character in characters:
-        string += str(character)
-    if ";" in string:
-        string = string.split(";")
-    else:
-        string = [string]
-
-    typer = len(string)
 
     valører = []
-    multi = []
     antTerninger = []
     terningtyper = []
+    multi = []
     totalListe = []
 
-    for valør in range(0, typer):
-        valører.append(string[valør].split(":")[0])  # KP
-        rest = string[valør].split(":")[1]  # 4d6x100
+    mynt_sep = characters.split(";")
+    print(mynt_sep)
+    for i in mynt_sep:
+        valør = re.search(r"[A-Z]{2}",i).span()
+        valører.append(i[valør[0]:valør[1]])
 
-        multi.append(int(rest.split("x")[1]))  # 100
-        rest = rest.split("x")[0]
-        antTerninger.append(int(rest.split("d")[0]))  # 4
-        terningtyper.append(int(rest.split("d")[1]))  # 6
+        antTerning = re.search(r"\d",i).span()
+        antTerninger.append(i[antTerning[0]:antTerning[1]])
 
-        pengeMengde = rollDice(antTerninger[valør], terningtyper[valør], multi[valør])
-        totalListe.append(valører[valør] + str(pengeMengde))
+        terningtype = list(re.search(r"d\d",i).span())
+        terningtype[0] += 1
+        terningtype = tuple(terningtype)
+        terningtyper.append(i[terningtype[0]:terningtype[1]])
 
-    svarStreng = ""
+        multien = list(re.search(r"x\d{1,4}",i).span())
+        multien[0] += 1
+        multien = tuple(multien)
+        multi.append(i[multien[0]:multien[1]])
+
+    while len(valører) > 0:
+        pengeMengde = rollDice(int(antTerninger.pop(0)), int(terningtyper.pop(0)), int(multi.pop(0)))
+        totalListe.append(str(pengeMengde) + " " + valører.pop(0))
+
+    svarStreng = "De finner "
     for e in range(len(totalListe)):
-        string = str(string)
         svarStreng = svarStreng + totalListe[e]
         if len(totalListe) - e == 1:
             pass
@@ -103,7 +112,7 @@ def equationSeparatorCash(characters):
 def equationSeparatorMagic(string):
     # string =  1d6;C, 1d4A,1d6B eller ""
     if string is None:
-        return "ingen magiske gjenstander"
+        return "Ingen magiske gjenstander"
 
     if "," in string:
         string = string.split(",")
@@ -124,8 +133,16 @@ def equationSeparatorMagic(string):
         antTerninger.append(int(rest.split("d")[0]))  # 1
         typeTerning.append(int(rest.split("d")[1]))  # 6
 
-        totalListe.append(
-            str(rollDice(antTerninger[type], typeTerning[type], 1)) + f" gjenstander fra liste {typeItems}.")
+        antGjenstander = rollDice(antTerninger[type], typeTerning[type], 1)
+        if antGjenstander == 1:
+            totalListe.append(
+            str(antGjenstander) + str(typeItems))
+        else:
+            totalListe.append(
+            str(antGjenstander) + str(typeItems))
+
+    findMagic(totalListe)
+    ##Alt under her er borked!!!!!!
 
     svarStreng = ""
     for e in range(len(totalListe)):
@@ -137,7 +154,44 @@ def equationSeparatorMagic(string):
         else:
             svarStreng = svarStreng + ", "
 
+
+
     return svarStreng
+
+
+def findMagic(string):
+    print(string)
+    # string = ["5A", "1C", "3G"]
+    if len(string) < 1:
+        return
+
+    tables = scrape("https://dungeonmastertools.github.io/index.html", "table", {"class":"table table-striped table-bordered"})
+    #for t in len(tables):
+    #    tables[t] = tables[t]{"tbody class = \"table"}
+    print(tables[0])
+
+
+    tables_indices_lookup = {"A" : 1,
+                    "B" : 2,
+                    "C" : 3,
+                    "D" : 4,
+                    "E" : 5,
+                    "F" : 6,
+                    "G" : 7,
+                    "H" : 8,
+                    "I" : 9}
+
+    amount_index_tuple = []
+    for element in string:
+        amount = int(element[0])
+        item = element[1]
+        item_index = tables_indices_lookup[item]
+        amount_index_tuple.append(tuple(amount, item_index))
+
+    for item_type in amount_index_tuple:
+        for amount in range(item_type[0]):
+            die_number = dieRoll(100)
+
 
 
 def lootRoll(cr, treasureRoll):

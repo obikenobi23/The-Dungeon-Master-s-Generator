@@ -20,7 +20,7 @@ def expMulti(monsterQuant):
         return 3
     elif monsterQuant >= 15:
         return 4
-    elif monsterQuant == 0:
+    elif monsterQuant < 1:
         return 0
     else:
         return "Uff da"
@@ -102,54 +102,35 @@ def encounter(maxExp, valids, valids_cr):
 
     encounterList = []
     encounterList_number = []
-    totalExp = 0
-
-    reps = 0
+    sumExp = 0
 
     # Fyll en liste med monstre som passer kvalifikasjonene
-    while totalExp * expMulti(sum(encounterList_number)) < maxExp:
-        pickAMonster = random.randint(0, len(validMonsters) - 1)
+    def pickAnEnemy(totalExp):
+        pickAMonster = random.randrange(len(validMonsters) - 1)
         pickedMonster = validMonsters[pickAMonster]
         expFromMonster = expList[int(validMonsters_cr[pickAMonster])]
+        encounterList.append(pickedMonster)
+        encounterList_number.append(1)
 
-        potentialExp = int((totalExp + expFromMonster) * expMulti(sum(encounterList_number) + 1))
-        if potentialExp > maxExp:
-            pass
-        else:
-            if pickedMonster not in encounterList:
-                encounterList.append(pickedMonster)
-                encounterList_number.append(1)
+        while totalExp * expMulti(sum(encounterList_number)) < maxExp:
+            potentialExp = int((totalExp + expFromMonster) * expMulti(sum(encounterList_number) + 1))
+
+            if potentialExp > maxExp:
+                break
             else:
-                for i in encounterList:
-                    if i == pickedMonster:
-                        encounterList_number[encounterList.index(i)] += 1
-            totalExp += expFromMonster
+                encounterList_number[encounterList.index(pickedMonster)] += 1
+                totalExp += expFromMonster
+        return totalExp
 
-        # Begrens antall fiender
-        if len(encounterList) > 5:
-            stronkest = "Bat"
-            for stronks in encounterList:
-                if validMonsters_cr[validMonsters.index(stronks)] > validMonsters_cr[validMonsters.index(stronkest)]:
-                    stronkest = stronks
-                    #print(stronkest)
-            for weaklings in encounterList:
-                if int(validMonsters_cr[validMonsters.index(weaklings)]) < int(
-                        validMonsters_cr[validMonsters.index(stronkest)]) - 3:
-                    encounterList_number.pop(encounterList.index(weaklings))
-                    encounterList.pop(encounterList.index(weaklings))
-
-        # Pass på at programmet ikke kjører for evig
-        reps += 1
-        if reps >= 5000:
-            print("Break på reps")
-            break
-        if maxExp - totalExp * expMulti(sum(encounterList_number)) < maxExp * 0.1:
-            print("Break diff")
-            break
+    sumExp = pickAnEnemy(sumExp)
+    while (sumExp * expMulti(sum(encounterList_number))) * 100 / maxExp < 10:
+        sumExp += pickAnEnemy(sumExp)
 
     encounter = zip(encounterList_number, encounterList)
-    encounter = tuple(encounter)
+    encounter = list(encounter)
 
-    print("Encounter list: ", encounterList)
-    print("Dette er encounteret: ", "\n".join([str(i) for i in encounter]))
-    print("Difficulty: ", totalExp * expMulti(sum(encounterList_number)))
+    #print("Encounter list: ", encounterList)
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n-------------------------------------")
+    print("Dette er encounteret:\n" + "\n".join([str(i) for i in encounter]))
+    print("Experience", sumExp)
+    print("Difficulty: ", sumExp * expMulti(sum(encounterList_number)))

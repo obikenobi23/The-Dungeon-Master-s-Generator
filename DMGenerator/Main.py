@@ -7,17 +7,32 @@ from DungeonGenerator.stairs import stairs
 from DungeonGenerator.start import start
 from DungeonGenerator.trap import trap
 from Treasure.TreasureGenerator import treasure
+from defs import inTput
+
 
 #dungeonType = input("Hvilken type Dungeoun skal beskrivelsene tas fra?")
 dungeonType = "y"
 lastValueCalled = ""
 
 while 1 == 1:
-    if lastValueCalled in ["chamber", "encounter", "treasure"]:
-        waitForEnter = input("Trykk på enter for å fortsette")
-    print("\'start\': startsted.\n\'ecounter\': setter i gang encounter.\n\'passage\': korridor.\n\'chamber\': rom.\n\'describe\': beskrivelse av rommet.\n\'door\': door.\n\'stairs\': trapper.\n\'trap\', \'trick\', \'hazard\', \'obstacle\'\n\'treasure\': skatt (loot eller hoard).")
+    #if lastValueCalled in ["chamber", "encounter", "treasure"]:
+    #    waitForEnter = input("Trykk på enter for å fortsette")
+    print("""
+\'start\'       :   startsted.
+\'ecounter\'    :   setter i gang encounter.
+\'passage\'     :   korridor.
+\'chamber\'     :   rom.
+\'describe\'    :   beskrivelse av rommet.
+\'door\'        :   door.
+\'stairs\'      :   trapper.
+\'trap\',
+\'trick\',
+\'hazard\',
+\'obstacle\'    :   velg hvilken hindring du vil ha
+\'treasure\'    : skatt (loot eller hoard).""")
+    print("Skriv inn koden for kommandoen du vil bruke")
     prompt = input("")
-    if prompt == "0":
+    if prompt in {"0", "q", ""}:
         break
     else:
         # print(prompt)
@@ -50,6 +65,6 @@ while 1 == 1:
         elif prompt == "treasure":
             lastValueCalled = "treasure"
             type = input("Skriv \"loot\" eller \"hoard\" ")
-            cr = int(input("Skriv inn en CR for fienden som eier dette. "))
+            cr = inTput("Skriv inn en CR for fienden som eier dette. ")
             treasure(type, cr)
         print("-----------------------")

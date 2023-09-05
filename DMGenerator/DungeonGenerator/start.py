@@ -1,6 +1,7 @@
 # Her genereres startlokasjon
 import openpyxl
 import random
+from defs import waitRead
 
 
 def start():
@@ -32,8 +33,13 @@ def start():
 
     # Skriv ut resultatet
     if fourLong:
-        print("You find yourself in a {} {}. There is {}. There is a {} as well".format(roomSize, roomShape.lower(), roomExits, extraExit))
+        text = "You find yourself in a {} {}. There is {}. There is a {} as well".format(roomSize, roomShape.lower(), roomExits, extraExit)
+        print(text)
     elif fiveLong:
-        print("You find yourself in a {} {} {}. There is {}. There is a {} as well".format(roomSize, roomShape.lower(), roomFlavour, roomExits, extraExit))
+        text = "You find yourself in a {} {} {}. There is {}. There is a {} as well".format(roomSize, roomShape.lower(), roomFlavour, roomExits, extraExit)
+        print(text)
     else:
-        print("You find yourself in a {} {}. There is {}.".format(roomSize, roomShape.lower(), roomExits))
+        text = "You find yourself in a {} {}. There is {}.".format(roomSize, roomShape.lower(), roomExits)
+        print(text)
+
+    waitRead(text)

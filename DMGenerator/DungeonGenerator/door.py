@@ -1,5 +1,7 @@
 import openpyxl
 import random
+from defs import waitRead
+from defs import fillerString
 
 def door():
     # Opprett kontakt med excel
@@ -15,3 +17,5 @@ def door():
     diceRoll = random.randrange(1, 21)
     beyond = wb[sheet].cell(diceRoll, 2).value
     print("Behind the door is a {}.".format(beyond))
+
+    waitRead(pickedDoor+beyond+fillerString(8))

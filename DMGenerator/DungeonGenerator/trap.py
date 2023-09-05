@@ -1,6 +1,7 @@
 # Her genereres feller og annet artig
 import openpyxl
 import random
+from defs import waitRead
 
 
 def trap(type):
@@ -22,7 +23,7 @@ def trap(type):
         effect = wb[sheet].cell(effect_diceRoll, 3).value.lower()
 
         # Skriv ut resultat
-        print("The trap is {}. If you {} it, {}.".format(severity, trigger, effect))
+        text = "The trap is {}. If you {} it, {}.".format(severity, trigger, effect)
 
     # For tricks
     elif type == "trick":
@@ -36,8 +37,9 @@ def trap(type):
         effect = (wb[sheet].cell(effect_diceRoll, 5).value).lower()
 
         # Skriv ut resultat
-        print("The trick is a {} which {}.".format(item, effect))
+        text = "The trick is a {} which {}.".format(item, effect)
 
+    # For hazards
     elif type == "hazard":
 
         # Angi randomisering
@@ -47,8 +49,9 @@ def trap(type):
         hazard = (wb[sheet].cell(diceRoll, 6).value).lower()
 
         # Skriv ut resultat
-        print("The hazard is {}.".format(hazard))
+        text = "The hazard is {}.".format(hazard)
 
+    # For obstacles
     elif type == "obstacle":
 
         # Angi randomisering
@@ -58,7 +61,10 @@ def trap(type):
         obstacle = (wb[sheet].cell(diceRoll, 7).value).lower()
 
         # Skriv ut resultat
-        print("The obstacle is {}.".format(obstacle))
+        text = "The obstacle is {}.".format(obstacle)
 
     else:  # Feilmelding
-        print("U fkd øp")
+        text = "U fkd øp"
+
+    print(text)
+    waitRead(text)

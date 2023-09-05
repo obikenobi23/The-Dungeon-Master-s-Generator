@@ -1,5 +1,6 @@
 import openpyxl
 import random
+from defs import waitRead
 
 def passage():
     # Opprett kontakt med excel
@@ -23,10 +24,16 @@ def passage():
 
     # Lag strenger for de forskjellige elementene i tabellen
     if len(passageWidth) == 1:
-        print("{}. The {} is {} wide.".format(passageText, passageType, passageWidth[0]))
+        text = "{}. The {} is {} wide.".format(passageText, passageType, passageWidth[0])
+        print(text)
     elif width_diceRoll in range(17,19):
-        print("{}. The {} is {}, {}.".format(passageText, passageType, passageWidth[0],passageWidth[1]))
+        text = "{}. The {} is {}, {}.".format(passageText, passageType, passageWidth[0],passageWidth[1])
+        print(text)
     elif width_diceRoll == 19:
-        print("{}. The {} is roughly {} and {}.".format(passageText, passageType, passageWidth[0], passageWidth[1]))
+        text = "{}. The {} is roughly {} and {}.".format(passageText, passageType, passageWidth[0], passageWidth[1])
+        print(text)
     elif width_diceRoll == 20:
-        print("{}, roughly {} and {}. There is a {}".format(passageText, passageWidth[0], passageWidth[1], passageWidth[2]))
+        text = "{}, roughly {} and {}. There is a {}".format(passageText, passageWidth[0], passageWidth[1], passageWidth[2])
+        print(text)
+
+    waitRead(text)

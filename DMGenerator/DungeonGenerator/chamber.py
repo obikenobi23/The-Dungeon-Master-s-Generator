@@ -2,6 +2,8 @@
 import openpyxl
 import random
 from DungeonGenerator.door import door
+from Encounters.create_encounter import createEncounter
+from defs import waitRead
 
 
 def roomFlavour(noise=False, air=False, odor=False):
@@ -59,6 +61,8 @@ def chamber():
         if "door" in exitType.lower():
             door()
 
+    waitRead(roomShape+contents)
+
     # Start generering av rommiljø
     flavourDice = random.randrange(1, 5)
     noise = False
@@ -77,3 +81,6 @@ def chamber():
             odor = True
 
         roomFlavour(noise, air, odor)
+
+    if "Monsters" in contents:
+        createEncounter()
