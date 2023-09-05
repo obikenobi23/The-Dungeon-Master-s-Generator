@@ -11,7 +11,7 @@ from defs import dieRoll
 
 
 # Introduserer Excel
-wb = openpyxl.load_workbook('Treasure/TreasureChart.xlsx')
+wb = openpyxl.load_workbook('C:/Users/Bruker/Documents/Rollespill/D&D/DMGenerator/Treasure/TreasureChart.xlsx')
 sheet = wb.sheetnames[0]
 
 
@@ -28,7 +28,7 @@ def treasure(type, cr):
         print("Galt input: treasure() -- Ikke \"loot\" eller \"hoard\".")
         exit(2)
 
-    print(diceString)
+    #print(diceString)
 
 
 def findCell(cr, treasureRoll, rangemax):
@@ -75,7 +75,7 @@ def equationSeparatorCash(characters):
     totalListe = []
 
     mynt_sep = characters.split(";")
-    print(mynt_sep)
+    #print(mynt_sep)
     for i in mynt_sep:
         valør = re.search(r"[A-Z]{2}",i).span()
         valører.append(i[valør[0]:valør[1]])
@@ -110,7 +110,7 @@ def equationSeparatorCash(characters):
 
 
 def equationSeparatorMagic(string):
-    # string =  1d6;C, 1d4A,1d6B eller ""
+    # string =  1d6;C, 1d4;A,1d6;B eller ""
     if string is None:
         return "Ingen magiske gjenstander"
 
@@ -136,10 +136,10 @@ def equationSeparatorMagic(string):
         antGjenstander = rollDice(antTerninger[type], typeTerning[type], 1)
         if antGjenstander == 1:
             totalListe.append(
-            str(antGjenstander) + str(typeItems))
+            str(antGjenstander) + str(typeItems[0]))
         else:
             totalListe.append(
-            str(antGjenstander) + str(typeItems))
+            str(antGjenstander) + str(typeItems[0]))
 
     findMagic(totalListe)
     ##Alt under her er borked!!!!!!
@@ -160,15 +160,15 @@ def equationSeparatorMagic(string):
 
 
 def findMagic(string):
-    print(string)
+    #print(string)
     # string = ["5A", "1C", "3G"]
     if len(string) < 1:
         return
 
-    tables = scrape("https://dungeonmastertools.github.io/index.html", "table", {"class":"table table-striped table-bordered"})
+    tables = scrape("https://dungeonmastertools.github.io/index.html", "tbody", {"class":"table-hover"})
     #for t in len(tables):
     #    tables[t] = tables[t]{"tbody class = \"table"}
-    print(tables[0])
+    #print(tables[0])
 
 
     tables_indices_lookup = {"A" : 1,
@@ -186,7 +186,49 @@ def findMagic(string):
         amount = int(element[0])
         item = element[1]
         item_index = tables_indices_lookup[item]
-        amount_index_tuple.append(tuple(amount, item_index))
+        amount_index_tuple.append((amount, item_index))
+    """
+    def evacuate(string, substring_start, substring_end):
+        print(type(string))
+        print(string.find(substring_start))
+        print(len(substring_start))
+        evacuate_from = string.find(substring_start) + len(substring_start)
+        evacuate_to = string.find(substring_end) - 1
+
+        evacuated_value = string[evacuate_from, evacuate_to]
+        evacuated_value.replace("–", ",")
+        evacuated_value.replace("00", "100")
+
+        string.replace(substring_start, "", 1)# Remove used piece of string
+        string.replace(substring_end, "", 1)# Remove one instance of substring, not all
+
+        if evacuate_to == -1 or evacuate_from == -1:
+            return -1
+        return evacuated_value
+    """
+
+    number_evacuated = ""
+    item_evacuated = ""
+    numbers_and_items_string_pair = []
+    for table in tables:
+        string_list = table.find_all("tbody", "table-hover")
+
+        """
+        while number_evacuated != -1 and item_evacuated != 1:
+            numbers_and_items_string_pair.append((number_evacuated, item_evacuated))
+            number_evacuated = evacuate(table, "<td>", "</td>")
+            item_evacuated = evacuate(table, "<td>", "</td>")
+        """
+    
+    for number, item in string_list:
+        number = number.split()[0]# Remove whitespace
+        if len(number) > 2:
+            number = (int(number[:1]), int(number[-2:]))
+        elif number == "00":
+            number = (100,)
+        else:
+            number = (int(number),)
+
 
     for item_type in amount_index_tuple:
         for amount in range(item_type[0]):
@@ -238,4 +280,4 @@ def rangeIter(iterable, value):
         if value in element:
             return iterable[element]
     print(f"Value out of range: rangeIter. Value: {value}")
-    exit(2)
+    # exit(2)

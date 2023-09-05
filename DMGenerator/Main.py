@@ -7,7 +7,7 @@ from DungeonGenerator.stairs import stairs
 from DungeonGenerator.start import start
 from DungeonGenerator.trap import trap
 from Treasure.TreasureGenerator import treasure
-from defs import inTput
+from defs import *
 
 
 #dungeonType = input("Hvilken type Dungeoun skal beskrivelsene tas fra?")
