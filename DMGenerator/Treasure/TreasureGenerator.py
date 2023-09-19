@@ -206,7 +206,7 @@ def findMagic(string):
             return -1
         return evacuated_value
     
-    evac = evacuate(tables)
+    # evac = evacuate(tables)
 
     number_evacuated = ""
     item_evacuated = ""
@@ -221,7 +221,9 @@ def findMagic(string):
             item_evacuated = evacuate(table, "<td>", "</td>")
         """
     
+    print(f"{string_list=}")
     for number, item in string_list:
+        print(f"{number=},{item}")
         number = number.split()[0]# Remove whitespace
         if len(number) > 2:
             number = (int(number[:1]), int(number[-2:]))
