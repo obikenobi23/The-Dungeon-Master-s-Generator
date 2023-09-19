@@ -23,7 +23,7 @@ def scrape(url, html_type, html_class):
 
 def dieRoll(diceSize, numbers_of_dice = 1):
     sum = 0
-    for i in numbers_of_dice:
+    for i in range(numbers_of_dice):
         rolled = r(diceSize)
         sum += rolled
     return sum
