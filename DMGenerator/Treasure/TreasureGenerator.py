@@ -206,6 +206,7 @@ def findMagic(string):
             return -1
         return evacuated_value
     
+    evac = evacuate(tables)
 
     number_evacuated = ""
     item_evacuated = ""
@@ -232,7 +233,6 @@ def findMagic(string):
     for item_type in amount_index_tuple:
         for amount in range(item_type[0]):
             die_number = dieRoll(100)
-            evacuate(string, )
 
 
 
