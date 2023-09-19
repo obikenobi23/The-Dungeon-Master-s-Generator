@@ -187,7 +187,7 @@ def findMagic(string):
         item = element[1]
         item_index = tables_indices_lookup[item]
         amount_index_tuple.append((amount, item_index))
-    """
+    
     def evacuate(string, substring_start, substring_end):
         print(type(string))
         print(string.find(substring_start))
@@ -205,7 +205,7 @@ def findMagic(string):
         if evacuate_to == -1 or evacuate_from == -1:
             return -1
         return evacuated_value
-    """
+    
 
     number_evacuated = ""
     item_evacuated = ""
@@ -229,10 +229,10 @@ def findMagic(string):
         else:
             number = (int(number),)
 
-
     for item_type in amount_index_tuple:
         for amount in range(item_type[0]):
             die_number = dieRoll(100)
+            evacuate(string, )
 
 
 
