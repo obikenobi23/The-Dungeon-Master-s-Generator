@@ -212,7 +212,7 @@ def findMagic(string):
     for table in tables:
         number_evacuated = evacuate(table, "<td>", "</td>")
         item_evacuated = evacuate(table, "<td>", "</td>")
-        numbers_and_items_string_pair = []
+        numbers_and_items_string_pair = [] # (str"int,int",str"item")
         string_list = table.find_all("tbody", "table-hover")
 
         
@@ -223,8 +223,8 @@ def findMagic(string):
         
     
     print(f"{string_list=}")
-    for number, item in string_list:
-        print(f"{number=},{item}")
+    for number, item in numbers_and_items_string_pair:
+        print(f"{number=},{item=}")
         number = number.split()[0]# Remove whitespace
         if len(number) > 2:
             number = (int(number[:1]), int(number[-2:]))
