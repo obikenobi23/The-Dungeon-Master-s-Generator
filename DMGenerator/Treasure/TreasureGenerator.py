@@ -208,17 +208,18 @@ def findMagic(string):
     
     # evac = evacuate(tables)
 
-    number_evacuated = evacuate(table, "<td>", "</td>")
-    item_evacuated = evacuate(table, "<td>", "</td>")
-    numbers_and_items_string_pair = []
+    
     for table in tables:
+        number_evacuated = evacuate(table, "<td>", "</td>")
+        item_evacuated = evacuate(table, "<td>", "</td>")
+        numbers_and_items_string_pair = []
         string_list = table.find_all("tbody", "table-hover")
 
         
         while number_evacuated != -1 and item_evacuated != -1:
             numbers_and_items_string_pair.append((number_evacuated, item_evacuated))
-            number_evacuated = evacuate(table, "<td>", "</td>")
-            item_evacuated = evacuate(table, "<td>", "</td>")
+            number_evacuated = evacuate(string_list, "<td>", "</td>")
+            item_evacuated = evacuate(string_list, "<td>", "</td>")
         
     
     print(f"{string_list=}")
