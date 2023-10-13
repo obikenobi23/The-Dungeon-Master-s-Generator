@@ -188,10 +188,11 @@ def findMagic(string):
         item_index = tables_indices_lookup[item]
         amount_index_tuple.append((amount, item_index))
     
-    def evacuate(string, substring_start, substring_end):
+    def evacuate(string, tag, substring_start, substring_end):
         print(type(string))
+        print(string)
         print(string.find(substring_start))
-        print(len(substring_start))
+        #print(len(substring_start))
         evacuate_from = string.find(substring_start) + len(substring_start)
         evacuate_to = string.find(substring_end) - 1
 
@@ -210,7 +211,7 @@ def findMagic(string):
 
     
     for table in tables:
-        number_evacuated = evacuate(table, "<td>", "</td>")
+        number_evacuated = evacuate(table, string="<td>", "</td>")
         item_evacuated = evacuate(table, "<td>", "</td>")
         numbers_and_items_string_pair = [] # (str"int,int",str"item")
         string_list = table.find_all("tbody", "table-hover")
